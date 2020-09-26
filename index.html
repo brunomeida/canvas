@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>my-first-website</title>
+  <title>shoot that ball</title>
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
   <LINK href="styles.css" rel="stylesheet" type="text/css">
 </head>
@@ -15,14 +15,18 @@
     <span id="scoreEl">0</span>
 </div>
 
-<div>
-    <div class="bg-white">
-        <h1>0</h1>
-        <p>Poits</p>
-        <buttom>Start Game</buttom>
-
+<div class="fixed inset-0 flex items-center justify-center" id="modalEl">
+    <div class="bg-white max-w-md  p-6 text-center">
+        <h1 class="text-4xl font-bold leading-none" id="bigScoreEl">0</h1>
+        <p class="text-sm text-gray-700 mb-4">Pontos</p>
+        <div>
+            <buttom class="max-w-md bg-blue-500 text-white py-4 px-2 rounded-full text-sm" id="startGameBtn">
+                Start Game
+            </buttom>
+        </div>
     </div>
 </div>
+
 <canvas></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js" integrity="sha512-IQLehpLoVS4fNzl7IfH8Iowfm5+RiMGtHykgZJl9AWMgqx0AmJ6cRWcB+GaGVtIsnC4voMfm8f2vwtY+6oPjpQ==" crossorigin="anonymous"></script>
 <script src="./index.js"></script>

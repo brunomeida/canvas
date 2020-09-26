@@ -7,7 +7,9 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const scoreEl = document.querySelector('#scoreEl');
-console.log(scoreEl);
+const startGameBtn = document.querySelector('#startGameBtn');
+const modalEl = document.querySelector('#modalEl');
+const bigScoreEl = document.querySelector('#bigScoreEl');
 
 class Player {
     constructor(x, y, radius, color) {
@@ -68,6 +70,7 @@ class Enemy {
         this.y = this.y + this.velocity.y;
     }
 }
+
 const friction = 0.99;
 class Particle {
     constructor(x, y, radius, color, velocity) {
@@ -101,14 +104,18 @@ class Particle {
 const y = canvas.height / 2;
 const x = canvas.width / 2;
 
-const player = new Player(x, y, 10, 'white');
+let player = new Player(x, y, 10, 'white');
+let projectiles = [];
+let enemies = [];
+let particles= [];
 
-
-
-
-const projectiles = [];
-const enemies = [];
-const particles= [];
+function init() {
+    player = new Player(x, y, 10, 'white');
+    projectiles = [];
+    enemies = [];
+    particles= [];
+    score = 0;
+}
 
 function spawnEnemies() {
     setInterval(() => {
@@ -144,6 +151,7 @@ function spawnEnemies() {
 
 let animationId;
 let score = 0;
+
 function animate() {
     animationId = requestAnimationFrame(animate)
     c.fillStyle = 'rgba(0, 0, 0, 0.1)';
@@ -179,6 +187,9 @@ function animate() {
 
             if (dist - enemy.radius - player.radius < 1) {
                 cancelAnimationFrame(animationId);
+                modalEl.style.display = 'flex'
+                bigScoreEl.innerHTML = score;
+                init();
             }
 
             projectiles.forEach((projectile, projectileIndex) => {
@@ -187,9 +198,6 @@ function animate() {
                 //projectiles touch enemy
                 if (dist - enemy.radius - projectile.radius < 1) 
                 {
-                    //increase score
-                    score += 100;
-                    scoreEl.innerHTML = score;
                     //explosions
                     for (let index = 0; index < enemy.radius * 2; index++) {
                         const radius = Math.random() * 2;
@@ -207,6 +215,9 @@ function animate() {
                         )
                     }
                     if (enemy.radius - 10 > 5) {
+                        //increase score
+                        score += 100;
+                        scoreEl.innerHTML = score;
                         gsap.to(enemy, {
                             radius: enemy.radius - 10
                         })
@@ -215,6 +226,9 @@ function animate() {
                             projectiles.splice(projectileIndex, 1);
                         }, 0)
                     } else {
+                        //increase score
+                        score += 250;
+                        scoreEl.innerHTML = score;
                         setTimeout(() => {
                             //touch
                             enemies.splice(index, 1);
@@ -227,22 +241,28 @@ function animate() {
     )
 }
 
-addEventListener('click', (event) => {
-    console.log(projectiles)
-    const angle = Math.atan2(
-            event.clientY - canvas.height / 2,
-            event.clientX - canvas.width / 2
-    );
+addEventListener('click', (event) => 
+    {
+        console.log(projectiles)
+        const angle = Math.atan2(
+                event.clientY - canvas.height / 2,
+                event.clientX - canvas.width / 2
+        );
 
-    const velocity = {
-        x:Math.cos(angle) * 6,
-        y:Math.sin(angle) * 6
-    };
+        const velocity = {
+            x:Math.cos(angle) * 6,
+            y:Math.sin(angle) * 6
+        };
 
-    console.log(angle)
-    projectiles.push(new Projectile (canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
-}
+        console.log(angle)
+        projectiles.push(new Projectile (canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
+    }
 )
 
-animate();
-spawnEnemies();
+startGameBtn.addEventListener('click', () =>
+{
+    animate();
+    spawnEnemies();
+    modalEl.style.display = 'none'
+
+})
