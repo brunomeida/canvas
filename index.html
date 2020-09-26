@@ -4,15 +4,27 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title>my-first-website</title>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
   <LINK href="styles.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 
-<img src="https://octodex.github.com/images/daftpunktocat-thomas.gif" id="octocat" alt="octocat-gif" />
+<div class="fixed text-white text-sm ml-2 mt-1 select-none">
+    <span>Score: </span>
+    <span id="scoreEl">0</span>
+</div>
 
-<!-- Change this code here by copy and pasting your template on line 15 -->
-<p>Welcome to your first GitHub Pages website!</p>
+<div>
+    <div class="bg-white">
+        <h1>0</h1>
+        <p>Poits</p>
+        <buttom>Start Game</buttom>
 
+    </div>
+</div>
+<canvas></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js" integrity="sha512-IQLehpLoVS4fNzl7IfH8Iowfm5+RiMGtHykgZJl9AWMgqx0AmJ6cRWcB+GaGVtIsnC4voMfm8f2vwtY+6oPjpQ==" crossorigin="anonymous"></script>
+<script src="./index.js"></script>
 </body>
 </html>
