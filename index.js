@@ -145,7 +145,7 @@ function spawnEnemies() {
     };
     
         enemies.push(new Enemy(x, y, radius, color, velocity));
-    }, 2000)
+    }, 1000)
 
 }
 
@@ -199,7 +199,7 @@ function animate() {
                 if (dist - enemy.radius - projectile.radius < 1) 
                 {
                     //explosions
-                    for (let index = 0; index < enemy.radius * 30; index++) {
+                    for (let index = 0; index < enemy.radius * 3; index++) {
                         const radius = Math.random() * 2;
                         particles.push(
                             new Particle(
