@@ -145,7 +145,7 @@ function spawnEnemies() {
     };
     
         enemies.push(new Enemy(x, y, radius, color, velocity));
-    }, 1000)
+    }, 2500)
 
 }
 
@@ -186,6 +186,8 @@ function animate() {
             const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
 
             if (dist - enemy.radius - player.radius < 1) {
+                var snd = new Audio("morri.wav"); // buffers automatically when created
+                snd.play();
                 cancelAnimationFrame(animationId);
                 modalEl.style.display = 'flex'
                 bigScoreEl.innerHTML = score;
@@ -199,7 +201,7 @@ function animate() {
                 if (dist - enemy.radius - projectile.radius < 1) 
                 {
                     //explosions
-                    for (let index = 0; index < enemy.radius * 3; index++) {
+                    for (let index = 0; index < enemy.radius * 5; index++) {
                         const radius = Math.random() * 2;
                         particles.push(
                             new Particle(
@@ -215,6 +217,8 @@ function animate() {
                         )
                     }
                     if (enemy.radius - 10 > 5) {
+                        var snd = new Audio("soft.wav"); // buffers automatically when created
+                        snd.play();
                         //increase score
                         score += 100;
                         scoreEl.innerHTML = score;
@@ -226,6 +230,8 @@ function animate() {
                             projectiles.splice(projectileIndex, 1);
                         }, 0)
                     } else {
+                        var snd = new Audio("explosion.wav"); // buffers automatically when created
+                        snd.play();
                         //increase score
                         score += 250;
                         scoreEl.innerHTML = score;
@@ -242,7 +248,7 @@ function animate() {
 }
 
 addEventListener('click', (event) => 
-    {
+    {        
         console.log(projectiles)
         const angle = Math.atan2(
                 event.clientY - canvas.height / 2,
@@ -256,6 +262,12 @@ addEventListener('click', (event) =>
 
         console.log(angle)
         projectiles.push(new Projectile (canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
+        
+        var snd = new Audio("shot.mp3"); // buffers automatically when created
+        snd.play();
+
+       // (new Audio()).canPlayType("audio/ogg; codecs=vorbis")
+
     }
 )
 
@@ -266,3 +278,47 @@ startGameBtn.addEventListener('click', () =>
     modalEl.style.display = 'none'
 
 })
+
+let maisPertoY
+let maisPertoX
+
+addEventListener('keypress',() => 
+    {
+        if (enemies.length == 0) {return}
+
+        novoY = Math.min.apply(Math, enemies.map(function(o) { return o.y; }))
+        maisPertoY = enemies.filter(enemy => enemy.y == novoY);
+
+        novoX = Math.min.apply(Math, enemies.map(function(o) { return o.x; }))
+        maisPertoX = enemies.filter(enemy => enemy.x == novoX);
+
+
+        
+        //novoX = Math.min.apply(Math, enemies.map(function(o) { return o.x; }))
+        
+        const angle = Math.atan2(
+            maisPertoY[0].y - canvas.height / 2,
+            maisPertoY[0].x - canvas.width / 2
+        );
+
+        const angleX = Math.atan2(
+            maisPertoX[0].y - canvas.height / 2,
+            maisPertoX[0].x - canvas.width / 2
+        );
+
+        const velocity = {
+            x:Math.cos(angle) * 6,
+            y:Math.sin(angle) * 6
+        };
+
+        const velocityX = {
+            x:Math.cos(angleX) * 6,
+            y:Math.sin(angleX) * 6
+        };
+
+        console.log(angle)
+        projectiles.push(new Projectile (canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
+
+        projectiles.push(new Projectile (canvas.width / 2, canvas.height / 2, 5, 'white', velocityX))
+    }
+)
