@@ -145,7 +145,7 @@ function spawnEnemies() {
     };
     
         enemies.push(new Enemy(x, y, radius, color, velocity));
-    }, 2500)
+    }, 2000)
 
 }
 
@@ -262,7 +262,6 @@ addEventListener('click', (event) =>
 
         console.log(angle)
         projectiles.push(new Projectile (canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
-        
         var snd = new Audio("shot.mp3"); // buffers automatically when created
         snd.play();
 
@@ -281,29 +280,24 @@ startGameBtn.addEventListener('click', () =>
 
 let maisPertoY
 let maisPertoX
+let maisProximo
+let inimigoAlvo
 
 addEventListener('keypress',() => 
     {
         if (enemies.length == 0) {return}
 
-        novoY = Math.min.apply(Math, enemies.map(function(o) { return o.y; }))
-        maisPertoY = enemies.filter(enemy => enemy.y == novoY);
+        maisProximo = Math.min.apply(Math, enemies.map(function(o) { 
+            const dist = Math.hypot(player.x - o.x, player.y - o.y)
+            return dist - o.radius - player.radius 
+        }))
 
-        novoX = Math.min.apply(Math, enemies.map(function(o) { return o.x; }))
-        maisPertoX = enemies.filter(enemy => enemy.x == novoX);
-
-
-        
-        //novoX = Math.min.apply(Math, enemies.map(function(o) { return o.x; }))
+        inimigoAlvo = enemies.filter(enemy =>
+            Math.hypot(player.x - enemy.x, player.y - enemy.y) - enemy.radius - player.radius == maisProximo); 
         
         const angle = Math.atan2(
-            maisPertoY[0].y - canvas.height / 2,
-            maisPertoY[0].x - canvas.width / 2
-        );
-
-        const angleX = Math.atan2(
-            maisPertoX[0].y - canvas.height / 2,
-            maisPertoX[0].x - canvas.width / 2
+            inimigoAlvo[0].y - canvas.height / 2,
+            inimigoAlvo[0].x - canvas.width / 2
         );
 
         const velocity = {
@@ -311,14 +305,10 @@ addEventListener('keypress',() =>
             y:Math.sin(angle) * 6
         };
 
-        const velocityX = {
-            x:Math.cos(angleX) * 6,
-            y:Math.sin(angleX) * 6
-        };
+        var snd = new Audio("shot.mp3"); // buffers automatically when created
+        snd.play();
 
         console.log(angle)
         projectiles.push(new Projectile (canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
-
-        projectiles.push(new Projectile (canvas.width / 2, canvas.height / 2, 5, 'white', velocityX))
     }
 )
